@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nordic Sparkle | Professional Cleaning Finland</title>
+    <style>
+        :root {
+            --bg: #0f172a; --card: #1e293b; --gold: #fbbf24;
+            --blue: #38bdf8; --text: #f8fafc; --white: #ffffff;
+        }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; background: var(--bg); color: var(--text); -webkit-tap-highlight-color: transparent; line-height: 1.6; }
+        
+        /* 1. Language Bar */
+        .lang-bar { background: #020617; padding: 12px; text-align: center; position: sticky; top: 0; z-index: 2000; border-bottom: 1px solid #334155; }
+        .lang-bar button { background: var(--card); border: 1px solid var(--blue); color: white; padding: 8px 16px; cursor: pointer; border-radius: 8px; margin: 4px; font-weight: bold; transition: 0.3s; }
+        .lang-bar button:hover { background: var(--blue); color: var(--bg); }
+
+        nav { background: var(--bg); padding: 15px 5%; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #334155; }
+        .logo { font-size: 24px; font-weight: bold; letter-spacing: 1px; }
+        .logo span { color: var(--blue); }
+
+        header { padding: 70px 20px; text-align: center; background: linear-gradient(rgba(15,23,42,0.85), rgba(15,23,42,0.85)), url('https://images.unsplash.com/photo-1581578731548-c64695cc6952?auto=format&fit=crop&w=1350&q=80'); border-bottom: 4px solid var(--gold); background-size: cover; background-position: center; }
+
+        .container { max-width: 1100px; margin: auto; padding: 40px 20px; text-align: center; }
+
+        /* Gallery Trigger */
+        .gallery-trigger { background: var(--card); border: 2px dashed var(--gold); color: var(--gold); padding: 25px; border-radius: 20px; cursor: pointer; font-size: 20px; font-weight: bold; margin-bottom: 50px; display: inline-block; width: 100%; max-width: 450px; transition: 0.3s; }
+        .gallery-trigger:hover { transform: scale(1.02); background: rgba(251, 191, 36, 0.1); }
+
+        /* Services Grid */
+        .services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 25px; }
+        .card { background: var(--card); padding: 30px; border-radius: 20px; text-align: center; cursor: pointer; border: 1px solid #334155; transition: 0.4s; }
+        .card:hover { border-color: var(--blue); transform: translateY(-8px); box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        .card h3 { margin: 15px 0 0 0; font-size: 20px; }
+
+        /* Modals System */
+        .modal { display: none; position: fixed; z-index: 3000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.96); backdrop-filter: blur(10px); overflow-y: auto; }
+        .modal-content { background: var(--card); margin: 4% auto; padding: 30px; width: 90%; max-width: 480px; border-radius: 24px; border: 1px solid var(--blue); position: relative; box-shadow: 0 0 40px rgba(56, 189, 248, 0.2); }
+        
+        .close-btn { position: absolute; right: 20px; top: 15px; cursor: pointer; font-size: 32px; color: #94a3b8; }
+        
+        select, input, textarea, .btn-action { width: 100%; padding: 15px; margin: 12px 0; border-radius: 12px; border: 1px solid #334155; background: #0f172a; color: white; font-weight: 600; font-size: 16px; box-sizing: border-box; }
+        select:focus, input:focus { border-color: var(--blue); outline: none; }
+        
+        .btn-action { border: 1px solid var(--blue); cursor: pointer; transition: 0.3s; text-transform: uppercase; letter-spacing: 1px; }
+        
+        .checklist-box { text-align: left; background: #020617; padding: 20px; border-radius: 15px; margin: 15px 0; border: 1px solid #1e293b; }
+        .checklist-box li { list-style: none; padding: 6px 0; color: #cbd5e1; border-bottom: 1px solid #1e293b; }
+        .checklist-box li:last-child { border: none; }
+
+        /* Gallery Appearance */
+        .gallery-scroll { display: grid; grid-template-columns: 1fr; gap: 20px; margin-top: 20px; }
+        .comp-box { display: flex; height: 260px; border-radius: 15px; overflow: hidden; border: 2px solid #334155; position: relative; background: #000; }
+        .comp-box img { width: 50%; height: 100%; object-fit: cover; }
+        .img-label { position: absolute; bottom: 10px; background: rgba(0,0,0,0.85); color: white; padding: 4px 12px; font-size: 12px; border-radius: 6px; font-weight: bold; border: 1px solid rgba(255,255,255,0.2); }
+
+        /* Admin Secret Panel */
+        #adminBox { display: none; background: #ffffff; color: #0f172a; padding: 30px; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 340px; z-index: 5000; border-radius: 20px; box-shadow: 0 0 100px rgba(0,0,0,0.9); }
+        #adminBox h3 { margin-top: 0; color: var(--bg); border-bottom: 2px solid #eee; padding-bottom: 10px; }
+        #adminBox label { font-size: 12px; font-weight: bold; color: #64748b; }
+
+        footer { text-align: center; padding: 50px; background: #020617; border-top: 1px solid #1e293b; }
+        .secret-trigger { cursor: pointer; color: #475569; transition: 0.3s; }
+        .secret-trigger:hover { color: var(--blue); }
+    </style>
+</head>
+<body>
+
+<div class="lang-bar">
+    <button onclick="translateSite('en')">English</button>
+    <button onclick="translateSite('fi')">Suomi</button>
+    <button onclick="translateSite('sv')">Svenska</button>
+</div>
+
+<nav>
+    <div class="logo">✨ NORDIC <span>SPARKLE</span></div>
+    <div id="topPhone" style="color:var(--blue); font-weight:bold; font-size: 18px;">📞 +358 40 819 0161</div>
+</nav>
+
+<header>
+    <h1 id="txt-h1">Nordic Sparkle</h1>
+    <p id="txt-sub">Your Trusted Cleaning Partner in Pargas & Turku</p>
+</header>
+
+<div class="container">
+    <div class="gallery-trigger" id="txt-view-gallery" onclick="openM('galleryModal')">
+        📸 View Our Work Gallery (Before & After)
+    </div>
+
+    <h2 id="txt-svc-title" style="letter-spacing: 2px;">OUR PROFESSIONAL SERVICES</h2>
+    <div class="services-grid" id="services-container"></div>
+</div>
+
+<div id="mainModal" class="modal">
+    <div class="modal-content">
+        <span class="close-btn" onclick="closeM('mainModal')">&times;</span>
+        <h2 id="modal-svc-name" style="color:var(--blue); text-align:center; margin-bottom:10px;">Service</h2>
+        
+        <p id="txt-step1" style="text-align:center; font-weight: bold;">1. Choose Your Location:</p>
+        <select id="citySelect">
+            <option value="">-- Select City --</option>
+            <option>Hauskarinkatu (Base)</option>
+            <option>Pargas / Parainen</option>
+            <option>Turku / Åbo</option>
+            <option>Kaarina</option>
+            <option>Raisio</option>
+            <option>Naantali</option>
+            <option>Nauvo / Nagu</option>
+            <option>Korpo / Korppoo</option>
+        </select>
+
+        <div id="detailsArea" style="display:none">
+            <div class="checklist-box">
+                <strong id="txt-incl">Included in this Service:</strong>
+                <ul id="checklist-list" style="padding:0; margin-top:12px;"></ul>
+            </div>
+            <p id="txt-type" style="text-align:center; font-weight: bold;">2. Choose Cleaning Type:</p>
+            <button class="btn-action" style="background:var(--gold); color:black; border:none;" onclick="openForm('Deep')">Deep Cleaning</button>
+            <button class="btn-action" style="background:#22c55e; border:none;" onclick="openForm('Basic')">Basic Cleaning</button>
+        </div>
+    </div>
+</div>
+
+<div id="formModal" class="modal">
+    <div class="modal-content">
+        <span class="close-btn" onclick="closeM('formModal')">&times;</span>
+        <h2 id="form-title" style="color:var(--gold); text-align:center;">Booking Form</h2>
+        <p style="font-size: 14px; text-align: center; margin-top: -10px;">Fill details to get a quote</p>
+        
+        <input type="text" id="custName" placeholder="Full Name / Nimesi" required>
+        <input type="text" id="custPhone" placeholder="Phone Number / Puhelinnumero" required>
+        <input type="text" id="custAddr" placeholder="Full Address / Tarkka Osoite" required>
+        <textarea id="custMsg" placeholder="Any special notes? / Erityisohjeet..." rows="3"></textarea>
+        
+        <button class="btn-action" style="background:var(--blue); color:var(--bg); border:none;" onclick="submitFinalForm()">
+            Send Booking Request
+        </button>
+    </div>
+</div>
+
+<div id="galleryModal" class="modal">
+    <div class="modal-content" style="max-width: 850px;">
+        <span class="close-btn" onclick="closeM('galleryModal')">&times;</span>
+        <h2 id="txt-gall-h" style="color:var(--gold); text-align:center;">Before & After Gallery</h2>
+        <div id="gallery-container" class="gallery-scroll">
+            </div>
+        <button class="btn-action" style="margin-top:20px;" onclick="closeM('galleryModal')">Close Gallery</button>
+    </div>
+</div>
+
+<div id="adminBox">
+    <h3>Admin Dashboard</h3>
+    <label>Update Contact Phone:</label>
+    <input type="text" id="newPhone" class="admin-input" placeholder="+358...">
+    <hr>
+    <label>Upload Work Photos:</label>
+    <input type="file" id="fB" class="admin-input" accept="image/*">
+    <label style="margin-top:5px; display:block;">After Photo:</label>
+    <input type="file" id="fA" class="admin-input" accept="image/*">
+    <button class="btn-action" style="background:black; color:white;" onclick="saveAdmin()">Save Changes</button>
+    <button onclick="closeM('adminBox')" style="background:none; border:none; color:red; width:100%; cursor:pointer; margin-top:10px;">Close Admin</button>
+</div>
+
+<footer>
+    <p>&copy; 2026 Nordic Sparkle | Quality Service in <span class="secret-trigger" onclick="adminTrigger()">Finland</span></p>
+</footer>
+
+<script>
+    let clicks = 0; let activeSvc = ""; let activeType = ""; let currentLang = 'en';
+
+    // 8 Professional Services with 3 Languages
+    const serviceData = {
+        'en': {
+            'h1': 'Nordic Sparkle', 'sub': 'Premium Cleaning in Pargas & Turku Area', 'svc': 'OUR SERVICES', 'gall': '📸 View Work Gallery', 'gallH': 'Before & After Results', 'step1': '1. Choose Location:', 'incl': 'Included in Service:', 'type': '2. Choose Cleaning Type:', 'formH': 'Booking Details',
+            'list': {
+                'Home Cleaning': ['Complete floor mopping', 'Dusting all surfaces', 'Kitchen deep clean', 'Bathroom sanitizing'],
+                'Office Cleaning': ['Workstation cleaning', 'Trash & Recycling', 'Floor vacuuming', 'Common area hygiene'],
+                'Hospital Cleaning': ['Medical-grade sterilization', 'Patient ward care', 'Biological waste control', 'High-safety standards'],
+                'Clinic Cleaning': ['Surface disinfection', 'Waiting room cleaning', 'Exam room hygiene', 'Sanitized handles/doors'],
+                'School Cleaning': ['Classroom dusting', 'Gym & Hallway cleaning', 'Desk sanitizing', 'Restroom maintenance'],
+                'Kitchen Cleaning': ['Heavy degreasing', 'Oven & Stove deep clean', 'Exhaust hood cleaning', 'Floor scrubbing'],
+                'Window Cleaning': ['Streak-free glass polish', 'Window frame cleaning', 'Inside & Outside', 'Water spot removal'],
+                'Construction Clean': ['Post-build dust removal', 'Paint & Glue spot removal', 'Final debris clearing', 'Full surface polish']
+            }
+        },
+        'fi': {
+            'h1': 'Nordic Sparkle Siivous', 'sub': 'Laadukasta siivousta Paraisilla ja Turussa', 'svc': 'PALVELUMME', 'gall': '📸 Katso työgalleria', 'gallH': 'Ennen ja Jälkeen', 'step1': '1. Valitse sijainti:', 'incl': 'Palveluun sisältyy:', 'type': '2. Valitse siivoustyyppi:', 'formH': 'Varauksen tiedot',
+            'list': {
+                'Kotisiivous': ['Lattioiden moppaus', 'Pintojen pölyjen pyyhintä', 'Keittiön puhdistus', 'Kylpyhuoneen pesu'],
+                'Toimistosiivous': ['Työpisteiden siivous', 'Roskien tyhjennys', 'Imurointi', 'Yhteistilojen hygienia'],
+                'Sairaalasiivous': ['Sairaalatason sterilointi', 'Potilasosastojen hoito', 'Jätehuolto', 'Turvavaatimukset'],
+                'Klinikkasiivous': ['Pintojen desinfiointi', 'Odotustilan siivous', 'Hoitohuoneiden hygienia', 'Kahvojen puhdistus'],
+                'Koulusiivous': ['Luokkahuoneiden pölyt', 'Liikuntasalin puhdistus', 'Aulatilat', 'WC-tilojen huolto'],
+                'Keittiösiivous': ['Rasvanpoisto', 'Uunin ja lieden pesu', 'Liesituuletin', 'Lattioiden hankauspesu'],
+                'Ikkunanpesu': ['Kirkas lasin kiillotus', 'Karmien puhdistus', 'Sisä- ja ulkopuoli', 'Tahranpoisto'],
+                'Loppusiivous': ['Rakennuspölyn poisto', 'Maali- ja liimatahrat', 'Jätteiden poisto', 'Pintojen kiillotus']
+            }
+        },
+        'sv': {
+            'h1': 'Nordic Sparkle Städning', 'sub': 'Premium städtjänster i Pargas och Åbo', 'svc': 'VÅRA TJÄNSTER', 'gall': '📸 Visa arbetsgalleri', 'gallH': 'Före och Efter', 'step1': '1. Välj plats:', 'incl': 'Ingår i tjänsten:', 'type': '2. Välj städtyp:', 'formH': 'Bokningsuppgifter',
+            'list': {
+                'Hemstädning': ['Golvmoppning', 'Dammtorkning', 'Kökssanering', 'Badrumsrengöring'],
+                'Kontorsstädning': ['Arbetsplatser', 'Sopor & Återvinning', 'Dammsugning', 'Gemensamma utrymmen'],
+                'Sjukhusstädning': ['Medicinsk sterilisering', 'Avdelningsvård', 'Avfallshantering', 'Säkerhetsstandard'],
+                'Klinikstädning': ['Ytdisinfektion', 'Väntrumsstädning', 'Undersökningsrum', 'Sanering av handtag'],
+                'Skolstädning': ['Klassrum', 'Gym & Korridorer', 'Skrivbordsrengöring', 'Toalettunderhåll'],
+                'Köksstädning': ['Avfettning', 'Rengöring av spis/ugn', 'Fläktrengöring', 'Golvskrubbning'],
+                'Fönstertvätt': ['Glaspolering', 'Rengöring av karmar', 'In- och utsida', 'Fläckborttagning'],
+                'Byggstädning': ['Byggdamm', 'Färg- och limfläckar', 'Slutlig bortforsling', 'Ytpolering']
+            }
+        }
+    };
+
+    function translateSite(lang) {
+        currentLang = lang; const d = serviceData[lang];
+        document.getElementById('txt-h1').innerText = d.h1;
+        document.getElementById('txt-sub').innerText = d.sub;
+        document.getElementById('txt-svc-title').innerText = d.svc;
+        document.getElementById('txt-view-gallery').innerText = d.gall;
+        document.getElementById('txt-gall-h').innerText = d.gallH;
+        document.getElementById('txt-step1').innerText = d.step1;
+        document.getElementById('txt-incl').innerText = d.incl;
+        document.getElementById('txt-type').innerText = d.type;
+
+        const container = document.getElementById('services-container'); container.innerHTML = "";
+        const icons = ['🏠','🏢','🏥','🩺','🏫','🍳','🪟','🏗️'];
+        Object.keys(d.list).forEach((s, i) => {
+            const card = document.createElement('div'); card.className = 'card';
+            card.onclick = () => { activeSvc = s; document.getElementById('modal-svc-name').innerText = s; document.getElementById('detailsArea').style.display = "none"; document.getElementById('citySelect').value = ""; openM('mainModal'); };
+            card.innerHTML = `<span style="font-size:45px; display:block; margin-bottom:10px;">${icons[i]}</span><h3>${s}</h3>`;
+            container.appendChild(card);
+        });
+    }
+
+    document.getElementById('citySelect').onchange = function() {
+        if(this.value !== "") {
+            const list = document.getElementById('checklist-list'); list.innerHTML = "";
+            serviceData[currentLang].list[activeSvc].forEach(p => { const li = document.createElement('li'); li.innerText = "✓ " + p; list.appendChild(li); });
+            document.getElementById('detailsArea').style.display = "block";
+        }
+    };
+
+    function openForm(type) { activeType = type; closeM('mainModal'); document.getElementById('form-title').innerText = `${serviceData[currentLang].formH}: ${type}`; openM('formModal'); }
+
+    function submitFinalForm() {
+        const name = document.getElementById('custName').value; const phone = document.getElementById('custPhone').value;
+        const addr = document.getElementById('custAddr').value; const msg = document.getElementById('custMsg').value;
+        const city = document.getElementById('citySelect').value;
+        
+        if(!name || !phone || !addr) { alert("Please fill Name, Phone and Address!"); return; }
+
+        const subject = encodeURIComponent(`${activeType} Cleaning Request - ${activeSvc}`);
+        const body = encodeURIComponent(`NORDIC SPARKLE BOOKING\n----------------------\nSERVICE: ${activeSvc}\nTYPE: ${activeType}\nCITY: ${city}\n\nCUSTOMER NAME: ${name}\nPHONE: ${phone}\nADDRESS: ${addr}\nMESSAGE: ${msg}\n\nSent from Nordic Sparkle Web App.`);
+        
+        window.location.href = `mailto:Sandeep.singh101197.039l@gmail.com?subject=${subject}&body=${body}`;
+        closeM('formModal');
+    }
+
+    // Admin & Photo Functions
+    function adminTrigger() { clicks++; if(clicks === 7) { openM('adminBox'); clicks=0; } setTimeout(()=>clicks=0, 3000); }
+    
+    async function saveAdmin() {
+        const phone = document.getElementById('newPhone').value;
+        if(phone) document.getElementById('topPhone').innerText = "📞 " + phone;
+        
+        const bF = document.getElementById('fB').files[0]; const aF = document.getElementById('fA').files[0];
+        if(bF && aF) {
+            const reader = (f) => new Promise(res => { const r=new FileReader(); r.onload=e=>res(e.target.result); r.readAsDataURL(f); });
+            const b = await reader(bF); const a = await reader(aF);
+            addPhoto(b, a);
+            let s = JSON.parse(localStorage.getItem('ns_v12_final') || '[]');
+            s.push({b, a}); localStorage.setItem('ns_v12_final', JSON.stringify(s));
+            alert("Success: Photo added to Gallery!");
+        }
+        closeM('adminBox');
+    }
+
+    function addPhoto(b, a) {
+        const div = document.createElement('div'); div.className = 'comp-box';
+        div.innerHTML = `<img src="${b}"><span class="img-label" style="left:10px">BEFORE</span><img src="${a}"><span class="img-label" style="right:10px">AFTER</span>`;
+        document.getElementById('gallery-container').prepend(div);
+    }
+
+    function openM(id) { document.getElementById(id).style.display = "block"; document.body.style.overflow = "hidden"; }
+    function closeM(id) { document.getElementById(id).style.display = "none"; document.body.style.overflow = "auto"; }
+
+    window.onload = () => {
+        const saved = JSON.parse(localStorage.getItem('ns_v12_final') || '[]');
+        saved.forEach(i => addPhoto(i.b, i.a));
+        translateSite('en');
+    };
+</script>
+</body>
+</html>
